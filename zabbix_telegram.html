@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Space Mono', monospace; }
+        .bg-dark-main { background-color: #000000; }
+    </style>
+    <title>Zabbix + Telegram</title>
+</head>
+<body class="bg-dark-main text-gray-300">
+
+    <nav class="p-6 max-w-5xl mx-auto">
+        <a href="index.html" class="text-xs uppercase tracking-widest text-[#C0C0C0] hover:text-white transition-colors">
+            ← Voltar
+        </a>
+    </nav>
+
+    <main class="max-w-5xl mx-auto py-12 px-6">
+
+        <header class="mb-12 border-l-4 border-[#C0C0C0] pl-6">
+            <h1 class="text-5xl font-bold text-white tracking-tighter">Zabbix + Telegram</h1>
+            <p class="mt-4 text-xl text-gray-400">Notificações em tempo real para infraestrutura.</p>
+
+            <div class="mt-6 flex flex-wrap gap-3">
+                <span class="inline-block bg-[#0b0b0b] border border-gray-800 text-[12px] text-[#C0C0C0] px-2 py-1 rounded-sm font-bold uppercase tracking-[0.2em]">
+                    𝄜 29.03.2026
+                </span>
+                <span class="inline-block bg-[#0b0b0b] border border-gray-800 text-[12px] text-[#C0C0C0] px-2 py-1 rounded-sm font-bold uppercase tracking-[0.2em]">
+                    ☰ INFRAESTRUTURA
+                </span>
+            </div>
+        </header>
+
+        <article class="space-y-8 text-left">
+            
+            <section class="mb-12">
+                <h2 class="text-xl font-bold text-white uppercase tracking-wider mb-6">Sobre o Projeto</h2>
+                <p class="text-[#C0C0C0] leading-relaxed">
+                    Neste laboratório eu desenvolvi um sistema de monitoramento de servidores utilizando o Zabbix, com o objetivo de identificar automaticamente 
+                    situações de uso elevado de recursos e gerar alertas em tempo real pelo Telegram. A proposta foi simular um cenário próximo ao de ambientes 
+                    corporativos, onde é essencial detectar problemas rapidamente para evitar indisponibilidades.
+                </p>
+            </section>
+
+            <section class="mb-12">
+                <h2 class="text-xl font-bold text-white uppercase tracking-wider mb-6">Implementação Técnica</h2>
+                
+                <div class="space-y-4 text-[#C0C0C0] leading-relaxed mb-10">
+                    <p class="font-bold text-white">1. Ambiente de teste</p>
+                    <p>Para este projeto foram utilizadas duas máquinas virtuais:</p>
+                    <p>- VM 1: Zabbix Server</p>
+                    <p>- VM 2: Servidor Monitorado</p>
+                    <p>Ambas utilizam Ubuntu Server 24.04.</p>
+                </div>
+
+                <div class="space-y-4 text-[#C0C0C0] leading-relaxed">
+                    <p class="font-bold text-white">2. Contextualização</p>
+                    <p>O Zabbix é uma plataforma open source de monitoramento utilizada para acompanhar o desempenho e a disponibilidade de servidores, redes e aplicações.
+                        Ele permite coletar métricas como uso de CPU, memória, armazenamento e diversos outros indicadores, ajudando a identificar problemas antes que eles impactem os usuários.</p>
+                    
+                    <p>Dentro do Zabbix, as triggers são regras lógicas que definem quando uma determinada condição deve ser considerada um problema. Elas analisam os dados coletados pelos itens de monitoramento e, quando uma condição específica é atendida 
+                        (por exemplo, um valor ultrapassando um limite por certo tempo), o sistema registra um incidente e pode executar ações automáticas, como envio de notificações ou alertas.</p>
+
+                    <p>Neste projeto, configurei triggers para monitorar CPU, memória RAM e uso de disco, definindo que um alerta seria gerado sempre que o uso ultrapassasse 80% por um período contínuo de 5 minutos</p>
+
+                    <p>Vale destacar que o foco principal do projeto não foi a instalação do Zabbix nem a configuração inicial do host monitorado. O objetivo central esteve na definição e configuração das triggers, 
+                        bem como na personalização das mensagens de alerta, visando criar um sistema de monitoramento mais eficiente e relevante para o cenário proposto.</p>
+                    
+                </div>
+
+                <div class="mt-16 space-y-6 text-[#C0C0C0] leading-relaxed border-t border-gray-900 pt-12">
+                    <p class="font-bold text-white text-lg">3. CPU</p>
+                    <p class="font-bold text-white mb-6">3.1 Criação da trigger de CPU</p>
+                    <p>Para criar a trigger de CPU, acessei o caminho Monitoramento → Hosts → Triggers e adicionei uma nova trigger. Nela, 
+                        configurei a condição para identificar quando o uso da CPU ultrapassasse o limite definido.</p>
+                </div>
+
+                <section class="mt-10 mb-8">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-4/7">
+                        <img src="assets/zabbix+telegram/trigger_cpu.png" alt="Configuração Zabbix" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Configuração da trigger de CPU.</p>
+                    </div>
+                </section>
+
+                <p class="text-[#C0C0C0] leading-relaxed font-bold text-white mb-6">3.3 Testando a trigger de CPU</p>
+                <p class="mb-8">Após configurar a trigger, realizei um teste prático para validar seu funcionamento, rodando o comando:</p>
+
+                <div class="my-8 code-container">
+                    <div class="flex items-center justify-between bg-[#0d0d0d] border border-[#C0C0C0] border-b-0 px-4 py-2 rounded-t-sm">
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Bash</span>
+                        <button onclick="copyMe(this)" class="text-[10px] font-bold text-[#C0C0C0] border border-[#C0C0C0] px-2 py-0.5 rounded-sm hover:bg-white hover:text-black transition-colors uppercase">
+                            Copiar
+                        </button>
+                    </div>
+                    <div class="bg-black border border-[#C0C0C0] p-4 rounded-b-sm shadow-inner">
+                        <code class="text-sm text-[#C0C0C0] font-mono">stress --cpu 8</code>
+                    </div>
+                </div>
+
+                <p class="text-[#C0C0C0] mb-8">Em seguida, utilizei outro comando para acompanhar o uso da CPU em tempo real e confirmar que o consumo estava elevado.</p>  
+
+                <div class="my-8 code-container">
+                    <div class="flex items-center justify-between bg-[#0d0d0d] border border-[#C0C0C0] border-b-0 px-4 py-2 rounded-t-sm">
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Bash</span>
+                        <button onclick="copyMe(this)" class="text-[10px] font-bold text-[#C0C0C0] border border-[#C0C0C0] px-2 py-0.5 rounded-sm hover:bg-white hover:text-black transition-colors uppercase">
+                            Copiar
+                        </button>
+                    </div>
+                    <div class="bg-black border border-[#C0C0C0] p-4 rounded-b-sm shadow-inner">
+                        <code class="text-sm text-[#C0C0C0] font-mono">top</code>
+                    </div>
+                </div>
+
+                <section class="mt-10 mb-8">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-2/4">
+                        <img src="assets/zabbix+telegram/top_cpu.png" alt="Incidente CPU" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Visualização de alta utilização da CPU.</p>
+                    </div>
+                </section>
+
+                <p class="text-[#C0C0C0] mb-8">Após alguns minutos, acessei o painel de incidentes do Zabbix e verifiquei que a trigger foi acionada corretamente, indicando que a configuração estava funcionando como esperado.</p>  
+
+                <section class="mt-10 mb-10">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-2/8">
+                        <img src="assets/zabbix+telegram/incidente_cpu.png" alt="Incidente CPU" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Visualização de alta utilização da CPU.</p>
+                    </div>
+                </section>
+
+                <div class="mt-16 space-y-6 text-[#C0C0C0] leading-relaxed border-t border-gray-900 pt-12">
+
+                    <p class="font-bold text-white text-lg">4. Memória RAM</p>
+                    <p class="text-[#C0C0C0] leading-relaxed font-bold text-white mb-6">4.1 Criação da trigger de RAM</p>
+                    <p class="mb-8">Para a memória RAM, segui o mesmo processo de criação da trigger, ajustando apenas a métrica monitorada para o uso de memória.</p>
+                    
+                
+                <section class="mt-10 mb-8">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-4/7">
+                        <img src="assets/zabbix+telegram/trigger_ram.png" alt="Trigger RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Configuração da trigger de RAM.</p>
+                    </div>
+                </section>
+
+                <p class="text-[#C0C0C0] leading-relaxed font-bold text-white mb-6">4.4 Testando a trigger de RAM</p>
+
+                <p class="text-[#C0C0C0] mb-8">Para testar, simulei o alto uso de memória com o comando:</p>  
+                
+                <div class="my-8 code-container">
+                    <div class="flex items-center justify-between bg-[#0d0d0d] border border-[#C0C0C0] border-b-0 px-4 py-2 rounded-t-sm">
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Bash</span>
+                        <button onclick="copyMe(this)" class="text-[10px] font-bold text-[#C0C0C0] border border-[#C0C0C0] px-2 py-0.5 rounded-sm hover:bg-white hover:text-black transition-colors uppercase">
+                            Copiar
+                        </button>
+                    </div>
+                    <div class="bg-black border border-[#C0C0C0] p-4 rounded-b-sm shadow-inner">
+                        <code class="text-sm text-[#C0C0C0] font-mono">stress-ng --vm 1 --vm-bytes 1600M --vm-keep --vm-populate -v</code>
+                    </div>
+                </div>
+
+                <p class="text-[#C0C0C0] mb-8">Após executar o comando, novamente utilizei o top para acompanhar o uso dos recursos em tempo real.</p>  
+
+                <div class="my-8 code-container">
+                    <div class="flex items-center justify-between bg-[#0d0d0d] border border-[#C0C0C0] border-b-0 px-4 py-2 rounded-t-sm">
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Bash</span>
+                        <button onclick="copyMe(this)" class="text-[10px] font-bold text-[#C0C0C0] border border-[#C0C0C0] px-2 py-0.5 rounded-sm hover:bg-white hover:text-black transition-colors uppercase">
+                            Copiar
+                        </button>
+                    </div>
+                    <div class="bg-black border border-[#C0C0C0] p-4 rounded-b-sm shadow-inner">
+                        <code class="text-sm text-[#C0C0C0] font-mono">top</code>
+                    </div>
+                </div>
+
+                <section class="mt-10 mb-8">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-1/8">
+                        <img src="assets/zabbix+telegram/top_ram.png" alt="Incidente RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Visualização de alta utilização da RAM.</p>
+                    </div>
+                </section>
+
+                <p class="text-[#C0C0C0] mb-8">Assim como no teste de CPU, o Zabbix identificou o aumento no consumo e registrou o incidente, demonstrando que a trigger de RAM estava funcionando corretamente.</p>  
+
+                <section class="mt-10 mb-10">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-4/7">
+                        <img src="assets/zabbix+telegram/incidente.ram.png" alt="Incidente RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Visualização de alta utilização da RAM.</p>
+                    </div>
+                </section>
+
+                <!-- ---------------------------------------------------->  
+
+                <div class="mt-16 space-y-6 text-[#C0C0C0] leading-relaxed border-t border-gray-900 pt-12">
+                    <p class="font-bold text-white text-lg">5. DISCO</p>
+                    <p class="font-bold text-white">5.1 Criação da trigger de DISCO</p>
+                </div>
+
+                <p class="text-[#C0C0C0] mb-8">Para o monitoramento de disco, criei uma trigger configurada para identificar quando o uso do armazenamento ultrapassasse o limite de 80%.</p>   
+
+                <section class="mt-10 mb-8">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-4/7">
+                        <img src="assets/zabbix+telegram/trigger_disk.png" alt="Trigger DISCO" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Configuração da trigger de DISCO.</p>
+                    </div>
+                </section>
+
+                <p class="text-[#C0C0C0] leading-relaxed font-bold text-white mb-6">5.4 Testando a trigger de DISCO</p>
+
+                <p class="text-[#C0C0C0] mb-8">Inicialmente, verifiquei o uso atual do disco com o comando df -h e observei que estava abaixo do limite definido.</p>   
+                
+                <div class="my-8 code-container">
+                    <div class="flex items-center justify-between bg-[#0d0d0d] border border-[#C0C0C0] border-b-0 px-4 py-2 rounded-t-sm">
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Bash</span>
+                        <button onclick="copyMe(this)" class="text-[10px] font-bold text-[#C0C0C0] border border-[#C0C0C0] px-2 py-0.5 rounded-sm hover:bg-white hover:text-black transition-colors uppercase">
+                            Copiar
+                        </button>
+                    </div>
+                    <div class="bg-black border border-[#C0C0C0] p-4 rounded-b-sm shadow-inner">
+                        <code class="text-sm text-[#C0C0C0] font-mono">df -h</code>
+                    </div>
+                </div>
+
+                <section class="mt-10 mb-8">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-3/6">
+                        <img src="assets/zabbix+telegram/df_antes.png" alt="Incidente RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Visualizando a utilização do disco, que mostra abaixo de 80%</p>
+                    </div>
+                </section>
+
+                <p class="text-[#C0C0C0] mb-8">Para simular um cenário de alto consumo, criei arquivos grandes utilizando o comando fallocate -l 5G teste, repetindo o processo até ultrapassar os 80% de uso.</p>
+
+                <div class="my-8 code-container">
+                    <div class="flex items-center justify-between bg-[#0d0d0d] border border-[#C0C0C0] border-b-0 px-4 py-2 rounded-t-sm">
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Bash</span>
+                        <button onclick="copyMe(this)" class="text-[10px] font-bold text-[#C0C0C0] border border-[#C0C0C0] px-2 py-0.5 rounded-sm hover:bg-white hover:text-black transition-colors uppercase">
+                            Copiar
+                        </button>
+                    </div>
+                    <div class="bg-black border border-[#C0C0C0] p-4 rounded-b-sm shadow-inner">
+                        <code class="text-sm text-[#C0C0C0] font-mono">fallocate -l 5G teste</code>
+                    </div>
+                </div>
+
+                <section class="mt-10 mb-8">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-3/6">
+                        <img src="assets/zabbix+telegram/df_depois.png" alt="Incidente RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Visualizando a utilização do disco, que mostra acima de 80%</p>
+                    </div>
+                </section>
+
+                <p class="text-[#C0C0C0] mb-8">Após isso, o Zabbix detectou a condição configurada e registrou o incidente, confirmando que a trigger estava operando corretamente.</p>  
+
+                <section class="mt-10 mb-10">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-1/8">
+                        <img src="assets/zabbix+telegram/incidente_disk.png" alt="Incidente RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Visualização de alta utilização do disco.</p>
+                    </div>
+                </section>
+
+                <!-- ---------------------------------------------------->  
+
+                <div class="mt-16 space-y-6 text-[#C0C0C0] leading-relaxed border-t border-gray-900 pt-12">
+                    <p class="font-bold text-white text-lg">6. BOT</p>
+                    <p class="font-bold text-white">6.1 Criação do bot no telegram</p>
+                </div>
+
+                <p class="text-[#C0C0C0] mb-8">Para enviar as notificações, criei um bot no Telegram utilizando o BotFather. Iniciei a conversa com o comando /start e segui as instruções para gerar o token de acesso do bot.</p>
+                
+
+                <section class="mt-10 mb-8">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-4/6">
+                        <img src="assets/zabbix+telegram/criacao_do_bot_telegram.png" alt="Incidente RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Conversa com o BotFather para a criação do bot.</p>
+                    </div>
+                </section>
+
+                <p class="font-bold text-white mb-6">6.2 Testando o bot</p>
+
+                <p class="text-[#C0C0C0] mb-8">Depois de criar o bot, precisei obter o chat ID para que o Zabbix soubesse para onde enviar as mensagens. 
+                    Para isso, enviei uma mensagem ao bot e acessei o seguinte link trocando 'SEU_TOKEN' pelo token gerado:</p>
+
+                <div class="my-8 code-container">
+                    <div class="flex items-center justify-between bg-[#0d0d0d] border border-[#C0C0C0] border-b-0 px-4 py-2 rounded-t-sm">
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">LINK</span>
+                        <button onclick="copyMe(this)" class="text-[10px] font-bold text-[#C0C0C0] border border-[#C0C0C0] px-2 py-0.5 rounded-sm hover:bg-white hover:text-black transition-colors uppercase">
+                            Copiar
+                        </button>
+                    </div>
+                    <div class="bg-black border border-[#C0C0C0] p-4 rounded-b-sm shadow-inner">
+                        <code class="text-sm text-[#C0C0C0] font-mono">https://api.telegram.org/botSEU_TOKEN/getUpdates</code>
+                    </div>
+                </div>
+
+                <p class="text-[#C0C0C0] mb-8">A resposta da API retornou o chat ID, que utilizei na configuração. 
+                    Em seguida, fiz um teste manual enviando uma mensagem via URL da API para confirmar que o bot estava funcionando corretamente, 
+                trocando 'SEUTOKENAQUI' pelo token do seu bot e 'SEUID' pelo seu ID chat.</p>
+
+                <div class="my-8 code-container">
+                    <div class="flex items-center justify-between bg-[#0d0d0d] border border-[#C0C0C0] border-b-0 px-4 py-2 rounded-t-sm">
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">LINK</span>
+                        <button onclick="copyMe(this)" class="text-[10px] font-bold text-[#C0C0C0] border border-[#C0C0C0] px-2 py-0.5 rounded-sm hover:bg-white hover:text-black transition-colors uppercase">
+                            Copiar
+                        </button>
+                    </div>
+                    <div class="bg-black border border-[#C0C0C0] p-4 rounded-b-sm shadow-inner">
+                        <code class="text-sm text-[#C0C0C0] font-mono">https://api.telegram.org/botSEUTOKENAQUI/sendMessage?chat_id=SEUID&text=TestandoEnvio</code>
+                    </div>
+                </div>
+
+                <section class="mt-10 mb-10">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-4/6">
+                        <img src="assets/zabbix+telegram/teste_mensagem_telegram.png" alt="Incidente RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Mensagem teste recebida pelo bot.</p>
+                    </div>
+                </section>
+
+                <!-- ---------------------------------------------------->
+
+                <div class="mt-16 space-y-6 text-[#C0C0C0] leading-relaxed border-t border-gray-900 pt-12">
+                    <p class="font-bold text-white text-lg">7. Configuração do Zabbix para enviar mensagens pelo Telegram</p>
+                    <p class="font-bold text-white">7.1 Criação do tipo de mídia</p>
+                </div>
+
+                <p class="text-[#C0C0C0] mb-8">No Zabbix, acessei a seção de alertas e configurei um novo tipo de mídia para Telegram, inserindo o token do bot e o chat ID obtido anteriormente.</p>
+
+                <section class="mt-10 mb-10">
+                    <div class="border border-[#C0C0C0] rounded-sm overflow-hidden bg-black mb-2 w-full max-w-[700px]">
+                        <img src="assets/zabbix+telegram/tipo_midia.png" alt="Trigger RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Configuração do tipo de mídia para Telegram.</p>
+                    </div>
+                </section>
+
+                <p class="font-bold text-white mb-6">7.2 Criação da ação da trigger</p>
+
+                <p class="text-[#C0C0C0] mb-6">Depois, configurei uma ação para que as notificações fossem enviadas automaticamente. Acessei Alertas → Ações → Ações de triggers e editei uma ação existente.</p>
+                <p class="text-[#C0C0C0] mb-6">Defini uma condição para que a ação fosse executada sempre que qualquer trigger fosse acionada. Também configurei as mensagens que seriam enviadas tanto no momento do problema quanto na sua recuperação.</p>
+
+                <p class="text-[#C0C0C0] mb-6">Após entrarmos na ação, na aba "Ação" adicionamos uma condição para que ela seja ativada.</p>
+                <p class="text-[#C0C0C0] mb-8">Deixei configurado para que seja ativado quando uma trigger for maior ou igual à não classificada.
+                    Isso signfica que quando qualqer trigger for acionada, a ação será ativada e uma mensagem será enviada para o Telegram.</p>
+                </p>
+
+                <section class="mt-10 mb-8">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-1/2">
+                        <img src="assets/zabbix+telegram/condicao_alerta.png" alt="Trigger RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Configuração da condição do alerta.</p>
+                    </div>
+                </section>
+
+                <section class="mt-10 mb-8">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-4/6">
+                        <img src="assets/zabbix+telegram/operacao_incidente.png" alt="Trigger RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Configuração da condição do alerta.</p>
+                    </div>
+                </section>
+
+                <section class="mt-10 mb-8">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-4/6">
+                        <img src="assets/zabbix+telegram/operacao_resolucao.png" alt="Trigger RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Configuração da condição do alerta.</p>
+                    </div>
+                </section>
+
+                <p class="font-bold text-white mb-6">7.3 Configuração do usuário</p>
+                <p class="text-[#C0C0C0] mb-8">Por fim, configurei um usuário no Zabbix para receber as notificações. Acessei a seção de usuários, editei o perfil desejado e, na aba de mídia, selecionei o tipo Telegram e inseri o chat ID.</p>
+
+                <section class="mt-10 mb-10">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-2/3">
+                        <img src="assets/zabbix+telegram/midia_usuario_censurado.png" alt="Trigger RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Configuração do usuário para receber notificações via Telegram.</p>
+                    </div>
+                </section>
+
+                <!-- ---------------------------------------------------->
+
+                <div class="mt-16 space-y-6 text-[#C0C0C0] leading-relaxed border-t border-gray-900 pt-12">
+                    <p class="font-bold text-white text-lg">8. Testes Finais</p>
+                    <p class="font-bold text-white">8.1 Teste da trigger de CPU</p>
+
+                    <p class="text-[#C0C0C0] mb-6">Repeti o teste de consumo de CPU utilizando o comando stress --cpu 8 e verifiquei se as notificações estavam sendo enviadas corretamente pelo Telegram.</p>
+                    <p class="text-[#C0C0C0] mb-8">Confirmei que a mensagem foi enviada tanto quando o problema foi detectado quanto quando a situação voltou ao normal.</p>
+                    
+                </div>
+
+                <p class="text-[#C0C0C0] mb-8">Mensagem ao ocorrer o incidente:</p>
+
+                <section class="mt-10 mb-8">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-1/2 lg:w-2/4">
+                        <img src="assets/zabbix+telegram/mensagem_telegram_incidente_cpu_censurado.png" alt="Trigger RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Mensagem enviada pelo Telegram após o incidente.</p>
+                    </div>
+                </section>
+
+                <p class="text-[#C0C0C0] mb-8">Mensagem após o incidente ser resolvido:</p>
+
+                <section class="mt-10 mb-10">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-1/2 lg:w-2/4">
+                        <img src="assets/zabbix+telegram/mensagem_telegram_resolucao_cpu_censurado.png" alt="Trigger RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Mensagem enviada pelo Telegram após o incidente.</p>
+                    </div>
+                </section>
+
+                <!-- ---------------------------------------------------->
+
+                <div class="mt-16 space-y-6 text-[#C0C0C0] leading-relaxed border-t border-gray-900 pt-12">
+                    <p class="font-bold text-white">8.2 Teste da trigger de RAM</p>
+
+                    <p class="text-[#C0C0C0] mb-8">Realizei novamente o teste de consumo de memória e observei o envio das notificações. 
+                        Assim como no teste anterior, o alerta foi enviado corretamente no momento do incidente e também na recuperação.</p>
+                    
+                </div>
+
+                <p class="text-[#C0C0C0] mb-8">Mensagem ao ocorrer o incidente:</p>
+
+                <section class="mt-10 mb-8">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-1/2 lg:w-2/4">
+                        <img src="assets/zabbix+telegram/mensagem_telegram_incidente_ram_censurado.png" alt="Trigger RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Mensagem enviada pelo Telegram após o incidente.</p>
+                    </div>
+                </section>
+
+                <p class="text-[#C0C0C0] mb-8">Mensagem após o incidente ser resolvido:</p>
+
+                <section class="mt-10 mb-10">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-1/2 lg:w-2/4">
+                        <img src="assets/zabbix+telegram/mensagem_telegram_resolucao_ram_censurado.png" alt="Trigger RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Mensagem enviada pelo Telegram após o incidente.</p>
+                    </div>
+                </section>
+
+                <!-- ---------------------------------------------------->  
+
+                <div class="mt-16 space-y-6 text-[#C0C0C0] leading-relaxed border-t border-gray-900 pt-12">
+                    <p class="font-bold text-white">8.3 Teste da trigger do disco</p>
+
+                    <p class="text-[#C0C0C0] mb-6">Por fim, repeti o teste de uso de disco, preenchendo o armazenamento até ultrapassar o limite configurado.</p>
+                    <p class="text-[#C0C0C0] mb-8">O Zabbix identificou o problema e enviou a notificação pelo Telegram, confirmando que todo o fluxo de monitoramento e alerta estava funcionando corretamente.</p>
+                    
+                </div>
+
+                <p class="text-[#C0C0C0] mb-8">Mensagem ao ocorrer o incidente:</p>
+
+                <section class="mt-10 mb-8">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-1/2 lg:w-2/4">
+                        <img src="assets/zabbix+telegram/mensagem_telegram_incidente_disk_censurado.png" alt="Trigger RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Mensagem enviada pelo Telegram após o incidente.</p>
+                    </div>
+                </section>
+
+                <p class="text-[#C0C0C0] mb-8">Mensagem após o incidente ser resolvido:</p>
+
+                <section class="mt-10 mb-10">
+                    <div class="border border-[#C0C0C0] rounded-lg overflow-hidden bg-black mb-2 w-full md:w-1/2 lg:w-2/4">
+                        <img src="assets/zabbix+telegram/mensagem_telegram_resolucao_disk_censurado.png" alt="Trigger RAM" class="w-full h-auto opacity-90 hover:opacity-100 transition">
+                        <p class="p-2 text-xs text-gray-500 italic bg-[#050505]">Legenda: Mensagem enviada pelo Telegram após o incidente.</p>
+                    </div>
+                </section>
+
+                <!-- ---------------------------------------------------->
+
+
+    <footer class="py-20 text-center opacity-30">
+        <p class="text-xs uppercase tracking-widest">Lucas Zansavio Pereira</p>
+    </footer>
+
+    <script>
+    function copyMe(button) {
+        // Encontra a caixa (container) onde este botão específico está
+        const container = button.closest('.code-container');
+        // Pega o texto do comando dentro desta caixa
+        const textToCopy = container.querySelector('code').innerText;
+
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            const originalText = button.innerText;
+            button.innerText = 'COPIADO!';
+            button.classList.add('bg-white', 'text-black');
+
+            // Volta ao normal depois de 2 segundos
+            setTimeout(() => {
+                button.innerText = originalText;
+                button.classList.remove('bg-white', 'text-black');
+            }, 2000);
+        });
+    }
+    </script>
+
+</body>
+</html>
